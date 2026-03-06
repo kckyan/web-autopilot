@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.session.json
+credentials.enc
+recordings/
+package-lock.json
