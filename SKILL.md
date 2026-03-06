@@ -31,7 +31,7 @@ Record → Analyze → **Confirm Fields** → Generate → Test → Register as 
 
 ### 📊 Query / Export（查询/导出类）
 数据抓取、报表导出。脚本跑完自动输出结果，无需人工干预。
-例：拉取销售报表、抓取服务项目数据、抓取 AC 收入数据
+例：拉取销售报表、抓取项目数据、导出收入明细
 
 ### 📝 Submit（提交类）
 提交申请单、报销单、付款单等。**每次执行需要传入动态参数**。
@@ -261,8 +261,8 @@ npx ts-node scripts/utils/credentials.ts extract <recording.json> # 从录制文
 
     // ── type=api 专用字段 ──
     "loginApiPath": "/api/sso/login",
-    "authType": "webLocalAuth",       // 可选，API body 中的认证类型字段
-    "appId": "6943592991949180",      // 可选，SSO 门户的应用 ID（用于 forward 跳转）
+    "authType": "passwordAuth",       // 可选，API body 中的认证类型字段
+    "appId": "1234567890",            // 可选，SSO 门户的应用 ID（用于 forward 跳转）
     "appForwardUrl": "...",           // 可选，直接跳转 URL（替代 appId）
 
     // ── type=form 专用字段 ──
@@ -355,13 +355,13 @@ const browser = await pw.chromium.launch({ headless: false });
 {
   "loginFlow": {
     "type": "api",
-    "loginUrl": "https://para.sso360.cn",
-    "loginDomain": "para.sso360.cn",
+    "loginUrl": "https://sso.example.com",
+    "loginDomain": "sso.example.com",
     "loginApiPath": "/api/sso/login",
-    "authType": "webLocalAuth",
-    "appId": "6943592991949180",
-    "appDomain": "app.ekuaibao.com",
-    "successIndicator": "url_contains:app.ekuaibao.com"
+    "authType": "passwordAuth",
+    "appId": "1234567890",
+    "appDomain": "app.example.com",
+    "successIndicator": "url_contains:app.example.com"
   }
 }
 ```

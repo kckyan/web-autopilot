@@ -21,7 +21,7 @@ import { getCredential, Credential } from './credentials';
 
 export interface LoginOptions {
   loginUrl: string;        // SSO login page URL
-  appDomain: string;       // Target app domain (e.g. app.ekuaibao.com)
+  appDomain: string;       // Target app domain (e.g. app.example.com)
   timeoutMs?: number;      // Max wait time (default 3 min)
   sessionDir?: string;
   headless?: boolean;      // Force headless (default: auto-detect)
@@ -96,7 +96,7 @@ async function tryAutoLogin(options: LoginOptions): Promise<Session | null> {
     // Step 6: Collect cookies from all pages
     const allCookies = await context.cookies();
 
-    // Step 7: Check for token-based auth (e.g., ekuaibao accessToken in URL)
+    // Step 7: Check for token-based auth (e.g., accessToken in URL query)
     const pages = context.pages();
     for (const p of pages) {
       const url = p.url();
@@ -125,7 +125,7 @@ async function tryAutoLogin(options: LoginOptions): Promise<Session | null> {
   }
 }
 
-/** Try logging in via direct API call (para.sso360.cn style) */
+/** Try logging in via direct API call (SSO REST API style) */
 async function tryApiLogin(page: any, context: any, loginDomain: string, cred: Credential): Promise<boolean> {
   if (!cred.loginApiPath) return false;
 
@@ -134,7 +134,7 @@ async function tryApiLogin(page: any, context: any, loginDomain: string, cred: C
     const body: any = {};
 
     if (cred.authType) {
-      // para.sso360.cn format
+      // SSO API format: { authType, credential: { username, password } }
       body.authType = cred.authType;
       body.credential = { username: cred.username, password: cred.password };
     } else {

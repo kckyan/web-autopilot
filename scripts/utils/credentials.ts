@@ -56,7 +56,7 @@ function decrypt(data: Buffer, passphrase?: string): string {
 export interface Credential {
   username: string;
   password: string;
-  authType?: string;         // e.g. "webLocalAuth"
+  authType?: string;         // e.g. "passwordAuth"
   loginApiPath?: string;     // e.g. "/api/sso/login"
   extraFields?: Record<string, any>;  // additional login form fields
 }
@@ -141,13 +141,13 @@ export function extractAndSaveFromRecording(recordingPath: string): { domain: st
     const body = typeof req.postData === 'string' ? (() => { try { return JSON.parse(req.postData); } catch { return null; } })() : (req.postData || req.body);
     if (!body) continue;
 
-    // Pattern 1: para.sso360.cn style { authType, credential: { username, password } }
+    // Pattern 1: SSO API style { authType, credential: { username, password } }
     if (body.credential?.username && body.credential?.password) {
       const domain = new URL(url).hostname;
       const cred: Credential = {
         username: body.credential.username,
         password: body.credential.password,
-        authType: body.authType || 'webLocalAuth',
+        authType: body.authType || 'passwordAuth',
         loginApiPath: new URL(url).pathname,
         extraFields: Object.fromEntries(Object.entries(body).filter(([k]) => !['credential', 'authType'].includes(k))),
       };
